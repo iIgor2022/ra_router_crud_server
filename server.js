@@ -33,11 +33,17 @@ app.get('/posts/:id', (request, response) => {
 });
 
 app.post('/posts', (request, response) => {
-  posts.push({
-    ...request.body,
-    id: nextId++,
-    created: Date.now()
-  });
+  const index = posts.findIndex((item) => item.id === request.body.id);
+
+  if (index === -1) {
+    posts.push({
+      ...request.body,
+      id: nextId++,
+      created: Date.now()
+    });
+  } else {
+    posts[index].content = request.body.content;
+  }
 
   response.status(204).end();
 });
